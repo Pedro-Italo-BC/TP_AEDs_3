@@ -1,164 +1,202 @@
-# TRABALHO PRÁTICO 01 - ALGORITMOS E ESTRUTURAS DE DADOS
+# TRABALHO PRÁTICO 02 - ALGORITMOS E ESTRUTURAS DE DADOS 3
 
-**Pontifícia Universidade Católica**  
+**Pontifícia Universidade Católica**
 **Ciência da Computação**
 
-Video de demonstração do projeto: https://youtu.be/dwxAfUK-qtI?feature=shared
+Video de demonstração do projeto:
 
-**Autores:**  
-Ane M. Viana  
-Camila C. Menezes  
-Daniel G. Pereira  
-Pedro Ítalo B. Cardoso  
+**Autores:**
+Ane M. Viana
+Camila C. Menezes
+Daniel G. Pereira
+Pedro Ítalo B. Cardoso
 
 ---
 
-**Forma de rodar o projeto:**
-```bash
-java Principal.java **/*.java
-```
-ou 
-```bash
-javac Principal.java **/*.java
-java Principal
-```
+Para rodar nosso projeto, utilize:  
+ javac Principal.java menus\.java entidades\Usuario\.java entidades\Curso\.java entidades\CursoUsuario\.java
+
+---
 
 ## Sumário
 
-1. Descrição Completa  
-   - Visão Geral do Sistema  
-   - Arquitetura do Sistema  
-   - Persistência e Estruturas de Dados  
-   - Funcionalidades Implementadas  
-   - Operações Especiais  
-   - Interface do Sistema  
-2. Pergunta 01  
-3. Pergunta 02  
-4. Pergunta 03  
-5. Pergunta 04  
-6. Pergunta 05  
-7. Pergunta 06  
-8. Pergunta 07  
-9. Pergunta 08  
+1. Descrição Completa
+- Visão Geral
+- Telas do Sistema (Prints)
+- Classes Criadas
+- Operações Implementadas
+- Índices
+2. Pergunta 01
+3. Pergunta 02
+4. Pergunta 03
+5. Pergunta 04
+6. Pergunta 05
+7. Pergunta 06
+8. Pergunta 07
+9. Pergunta 08
 
 ---
 
 ## 1. Descrição Completa
 
-### 1.1 Visão Geral do Sistema
+### Visão Geral
 
-O sistema desenvolvido tem como objetivo gerenciar usuários e cursos, permitindo o cadastro, consulta, atualização e remoção de dados, além de manter o relacionamento entre essas entidades. O sistema segue o padrão arquitetural MVC (Model-View-Control), separando a lógica de negócio, a persistência de dados e a interação com o usuário. Os dados são armazenados em arquivos binários utilizando registros de tamanho variável, estruturados com lápide, indicador de tamanho e vetor de bytes. Para otimizar o acesso aos dados, foram utilizados índices baseados em Tabelas Hash Extensíveis e Árvores B+.
+O sistema desenvolvido consiste em uma aplicação de gerenciamento de cursos e inscrições, permitindo que usuários visualizem cursos, realizem inscrições e que os responsáveis pelos cursos gerenciem seus participantes.
 
----
+Toda a persistência é feita em arquivos binários utilizando RandomAccessFile, com uso de índices (Árvore B+ e Hash Extensível) para garantir eficiência nas operações e evitar buscas sequenciais.
 
-### 1.2 Arquitetura do Sistema
+### Telas do Sistema (Prints)
 
-O sistema foi estruturado em três camadas principais:
-- Modelo (Model): Representado pelas classes de entidades, como Usuario e Curso, responsáveis por encapsular os dados e realizar a serialização e desserialização dos objetos.
-- Visão (View): Classes como VisaoUsuario e VisaoCurso, responsáveis pela entrada e saída de dados com o usuário, garantindo a separação entre interface e lógica.
-- Controle (Controller): Classes como ControleUsuario e ControleCurso, responsáveis pela lógica do sistema, gerenciamento de menus e coordenação entre visão e modelo.
+### Menu Minhas Inscrições   
+<img src="imgs/Menu.jpg" width="700"> 
 
----
+### Listagem paginada de cursos   
+<img src="imgs/Listagem.jpg" width="700"> 
 
-### 1.3 Persistência e Estruturas de Dados
+### Detalhes de um curso   
+<img src="imgs/Detalhes.jpg" width="700"> 
 
-Os dados são armazenados por meio de arquivos binários utilizando um CRUD genérico baseado na classe ArquivoIndexado. Cada registro possui:
-- Lápide (indica se o registro está ativo ou excluído)
-- Indicador de tamanho do registro
-- Vetor de bytes contendo os dados da entidade
-Para garantir eficiência nas operações, foram utilizados:  
-- Tabela Hash Extensível: utilizada como índice direto para acesso rápido por ID.
-- Árvore B+: utilizada como índice indireto para buscas ordenadas e para representar o relacionamento 1:N entre usuários e cursos.
+### Usuário inscrito no curso   
+<img src="imgs/Inscritos.jpg" width="700"> 
+
+### Gerenciamento de inscritos    
+<img src="imgs/InscritoC1.jpg" width="700">  
+<img src="imgs/InscritoC2.jpg" width="700"> 
+
+### Busca por código NanoID   
+<img src="imgs/Busca.jpg" width="700">
 
 
----
+### Classes Criadas
 
-### 1.4 Funcionalidades Implementadas
+CursoUsuario:
+- Representa a relação N:N entre cursos e usuários.
+- Armazena:
+- idCursoUsuario
+- idCurso
+- idUsuario
+- dataInscricao
+- cancelado
 
-- CRUD completo de usuários
-- CRUD completo de cursos
-- Associação de cursos a usuários por meio de chave estrangeira (idUsuario)
-- Implementação do relacionamento 1:N utilizando Árvore B+
-- Listagem de cursos por usuário
-- Geração automática de código compartilhável para cursos
-- Controle de estados do curso (ativo, sem inscrições, concluído e cancelado)
+ArquivoCursoUsuario:
+- Responsável pelo CRUD da entidade CursoUsuario.
+- Implementa os índices utilizando Árvore B+ e Hash Extensível.
 
----
+InscritoInfo:
+- Utilizada para reunir informações do usuário e da inscrição em uma única estrutura.
 
-### 1.5 Operações Especiais
+### Operações Implementadas
 
-Além das funcionalidades básicas, foram implementadas algumas melhorias e validações adicionais:
-- Confirmação de senha: durante o cadastro de usuários, é solicitado que a senha seja digitada duas vezes. Caso os valores informados não sejam iguais, o sistema não permite a continuidade do cadastro, garantindo maior segurança e evitando erros de digitação.
-- Validação de vínculo entre entidades: o sistema impede a exclusão de usuários que possuam cursos ativos associados, garantindo a integridade dos dados.
-- Atualização de índices: sempre que um registro é alterado e muda de posição no arquivo, os índices são atualizados automaticamente para manter a consistência.
+CursoUsuario:
+- Criar inscrição
+- Ler inscrição
+- Atualizar inscrição
+- Cancelar/remover inscrição
 
----
 
-### 1.6 Interface do Sistema
+### Índices
 
-A interação com o usuário é realizada por meio de menus em modo texto, organizados de forma hierárquica, utilizando breadcrumbs para indicar a navegação no sistema. As telas do sistema, incluindo menus de usuários e cursos, bem como exemplos de operações realizadas, são apresentadas ao final deste relatório para ilustrar o funcionamento da aplicação.
+#### Árvore B+ 01 — idUsuario → idCursoUsuario
+
+Implementada através do índice: private ArvoreBMais<ParIdId> idxUsuarioCurso;
+
+Permite recuperar rapidamente todas as inscrições de um usuário sem percorrer o arquivo inteiro.
+
+Método principal: readAllByIdUsuario(int idUsuarioBuscado)
+
+#### Árvore B+ 02 — idCurso → idCursoUsuario
+Implementada através do índice: private ArvoreBMais<ParIdId> idxCursoUsuario;
+Permite recuperar rapidamente todos os usuários inscritos em um curso.
+
+Método principal: readAllByIdCurso(int idCursoBuscado)
+
+#### Hash Extensível — idCursoUsuario → endereço
+Implementado através do índice: private HashExtensivel<ParIDEndereco> idxDireto;
+
+Utilizado para localizar diretamente um registro no arquivo a partir do ID da inscrição.
+
+Métodos que utilizam o índice:
+- readById()
+- delete()
+- update()
 
 ---
 
 ## 2. Pergunta 01
 
-**Há um CRUD de usuários funcionando corretamente?**
+**Há um CRUD da entidade de associação CursoUsuario (que estende a classe ArquivoIndexado, acrescentando Tabelas Hash Extensíveis e Árvores B+ como índices diretos e indiretos conforme necessidade) que funciona corretamente?**
 
-Sim. Foi implementado um CRUD completo para a entidade de usuários a partir da extensão da classe ArquivoIndexado, conforme proposto em sala. Essa implementação garante a persistência dos dados em arquivo binário, utilizando registros com lápide, indicador de tamanho e vetor de bytes.  
-Para otimizar as operações, foram utilizados dois tipos de índices:  
-- Tabela Hash Extensível (índice direto): utilizada para mapear o ID do usuário à sua posição no arquivo, permitindo acesso rápido e direto aos registros.  
-- Árvore B+ (índice indireto): utilizada para indexar atributos secundários, como o nome do usuário, possibilitando buscas eficientes e ordenadas, além de suportar múltiplos resultados quando necessário.  
-As operações de create, read, update e delete funcionam corretamente e mantêm a consistência entre o arquivo de dados e os índices. Sempre que um registro é inserido, atualizado ou removido, os índices são devidamente atualizados para refletir as mudanças, garantindo integridade e eficiência nas buscas.   
-Dessa forma, o sistema atende aos requisitos propostos, apresentando um CRUD funcional, eficiente e estruturado conforme o padrão estabelecido.
+Sim. Foi implementado um CRUD funcional para a entidade de associação CursoUsuario, responsável pelo relacionamento N:N entre usuários e cursos.
+
+A implementação utiliza:
+
+- Hash Extensível como índice direto;
+- Árvores B+ como índices indiretos;
+- RandomAccessFile para persistência dos registros.
+
+Embora a implementação não utilize diretamente herança da classe ArquivoIndexado, ela segue a mesma arquitetura de persistência e indexação proposta no trabalho.
 
 ---
 
 ## 3. Pergunta 02
 
-**Há um CRUD de cursos funcionando corretamente?**
+**A visão de inscrições está corretamente implementada e permite consultas aos cursos em que um usuário está inscrito?**
 
-Sim. Foi implementado um CRUD completo para a entidade Curso, também baseado na extensão da classe ArquivoIndexado, conforme definido na arquitetura do projeto. Os registros são armazenados em arquivo binário utilizando a estrutura composta por lápide, indicador de tamanho e vetor de bytes, garantindo flexibilidade para registros de tamanho variável. 
-Para garantir eficiência nas operações, foram utilizados índices diretos e indiretos:
-- Tabela Hash Extensível (índice direto): responsável por mapear o ID do curso à sua posição física no arquivo, permitindo acesso rápido e eficiente aos registros.
-- Árvore B+ (índice indireto): utilizada para indexação de atributos como o nome do curso, possibilitando consultas ordenadas e eficientes, além de suportar múltiplos cursos com nomes semelhantes.  
-As operações de create, read, update e delete foram implementadas de forma consistente, garantindo a atualização adequada tanto do arquivo de dados quanto dos índices associados. Em especial, nas operações de atualização que implicam mudança de endereço do registro, os índices são corretamente ajustados para manter a integridade referencial.  
-Dessa forma, o CRUD de cursos atende plenamente aos requisitos do trabalho, apresentando funcionamento correto, eficiência nas buscas e consistência dos dados.
+Sim. O sistema possui uma visão de inscrições que permite ao usuário consultar todos os cursos em que está inscrito.
+
+Essa funcionalidade foi implementada utilizando a entidade de associação CursoUsuario e os índices com Árvores B+, evitando buscas sequenciais no arquivo principal.
+
+A recuperação das inscrições do usuário é feita pelo método:
+
+- readAllByIdUsuario(int idUsuarioBuscado)
+
+Esse método utiliza a árvore B+:
+
+- idUsuario → idCursoUsuario
+
+permitindo localizar rapidamente todas as inscrições associadas a um usuário.
+
+Além disso, o sistema permite:
+
+- visualizar os dados completos do curso;
+- cancelar inscrições;
+- impedir inscrições duplicadas;
+- validar cursos cancelados ou com inscrições encerradas.
 
 ---
 
 ## 4. Pergunta 03
 
-**Os cursos estão vinculados aos usuários?**
+**A visão de cursos funciona corretamente e permite a gestão dos usuários inscritos em um curso?**
 
-Sim. A entidade Curso possui o atributo idUsuario, que atua como chave estrangeira, estabelecendo o vínculo entre cursos e usuários. Esse atributo é utilizado para garantir o relacionamento do tipo 1:N, no qual um usuário pode estar associado a vários cursos, enquanto cada curso pertence a um único usuário.  
-Durante a criação de um novo curso, o sistema associa automaticamente o idUsuario do usuário ativo ao registro do curso, garantindo a consistência do vínculo. Além disso, operações de leitura e listagem utilizam esse atributo para recuperar todos os cursos relacionados a um determinado usuário.  
-O relacionamento também é reforçado por meio do uso de índices indiretos, que permitem acessar de forma eficiente todos os cursos vinculados a um usuário específico, sem a necessidade de varredura completa do arquivo.  
-Dessa forma, o sistema assegura corretamente a integridade do relacionamento entre usuários e cursos por meio do uso da chave estrangeira idUsuario.  
+Sim. A visão de cursos foi implementada corretamente e permite ao dono do curso gerenciar os usuários inscritos. O sistema possibilita:
+
+- localizar cursos pelo código NanoID;
+- visualizar os detalhes completos do curso;
+- listar os usuários inscritos em um curso específico;
+- consultar rapidamente as inscrições utilizando índices com Árvores B+;
+- remover inscrições de usuários;
+- validar estados do curso (aberto, encerrado, cancelado e concluído).
 
 ---
 
 ## 5. Pergunta 04
 
-**Há uma Árvore B+ para o relacionamento 1:N?**
+**Há uma visualização dos cursos de outras pessoas por meio de um código NanoID?**
 
-Sim. Foi implementada uma Árvore B+ para representar o relacionamento do tipo 1:N entre usuários e cursos, utilizando o par (idUsuario, idCurso) como chave de indexação.  
-Nesse índice, o idUsuario é utilizado como chave principal, permitindo a associação de múltiplos idCurso a um mesmo usuário. Dessa forma, cada entrada na Árvore B+ pode estar relacionada a vários cursos pertencentes ao mesmo usuário, refletindo corretamente a cardinalidade do relacionamento.  
-A Árvore B+ é utilizada principalmente para recuperar de forma eficiente todos os cursos vinculados a um determinado usuário, sem a necessidade de percorrer todo o arquivo de dados. Durante as operações de inserção e remoção de cursos, a estrutura da árvore é atualizada para manter a consistência do relacionamento.  
-Além disso, por se tratar de uma Árvore B+, as chaves são mantidas ordenadas, o que permite operações eficientes de busca e recuperação sequencial dos cursos associa- dos a um usuário.
-Dessa forma, a utilização da Árvore B+ atende ao requisito de modelagem do relacionamento 1:N, garantindo eficiência e integridade na associação entre usuários e cursos. 
+Sim, o sistema possui visualização de cursos de outras pessoas por meio de um código NanoID.
+
+Cada curso possui um código único armazenado no atributo codigo, permitindo que usuários encontrem cursos específicos sem precisar navegar pela listagem completa.
 
 ---
 
 ## 6. Pergunta 05
 
-**Há um CRUD de usuários com índices?**
+**A integridade do relacionamento entre cursos e usuários está mantida em todas as operações?**
 
-Sim. O sistema possui um CRUD completo para a entidade de usuários, implementado a partir da extensão da classe genérica Arquivo, que segue os princípios propostos pela classe ArquivoIndexado. Essa implementação garante a persistência dos dados em arquivos binários com registros de tamanho variável, utilizando lápide, indicador de tamanho e vetor de bytes.  
-A operação de create realiza a geração automática de identificadores, grava os dados no arquivo e atualiza o índice direto por meio da Tabela Hash Extensível, associando o ID ao endereço físico do registro. 
-A operação de read utiliza exclusivamente o índice direto (indiceDireto.read(id)) para localizar o endereço do registro, evitando varreduras sequenciais e garantindo acesso eficiente aos dados.  
-A operação de update trata corretamente tanto atualizações em que o registro mantém seu tamanho quanto casos em que há aumento, realizando a realocação do registro quando necessário. Nesses casos, o índice direto é devidamente atualizado para refletir o novo endereço no arquivo.  
-A operação de delete marca o registro com lápide, remove sua referência do índice e insere o espaço liberado em uma lista de reutilização, garantindo melhor aproveitamento do espaço em disco.  
-Além disso, foi implementado um índice indireto adicional utilizando Tabela Hash Extensível (indiceEmail), permitindo a busca eficiente de usuários pelo email no processo de autenticação (login). 
+Sim, a integridade do relacionamento entre cursos e usuários está mantida em todas as operações implementadas.
+
+A entidade CursoUsuario representa a relação N:N entre usuários e cursos, garantindo que uma inscrição sempre associe corretamente um idUsuario a um idCurso.
 
 ---
 
@@ -172,15 +210,17 @@ Sim. O projeto compila corretamente, sem apresentar erros de compilação. Todas
 
 ## 8. Pergunta 07
 
-**O sistema funciona sem erros?**
+**O trabalho está completo e funcionando sem erros de execução?**
 
-Sim. O sistema está completo e funcional, atendendo a todos os requisitos propostos. Durante os testes realizados, não foram identificados erros de execução, e todas as funcionalidades, incluindo os CRUDs, o relacionamento entre entidades e os mecanismos de indexação, operam conforme esperado.
+Sim. Durante os testes realizados pelo grupo, as funcionalidades implementadas funcionaram corretamente, incluindo o CRUD de inscrições, os índices com Árvores B+ e Hash Extensível, as consultas de cursos e o gerenciamento de inscritos.
+
+Não foram encontrados erros de execução nos cenários testados.
 
 
 ---
 
 ## 9. Pergunta 08
 
-**O trabalho é original?**
+**O trabalho é original e não a cópia de um trabalho de outro grupo?**
 
 Sim. O trabalho foi desenvolvido de forma original pelo grupo, com base nos conceitos abordados em sala de aula. A implementação das funcionalidades, organização do código e decisões de projeto refletem o entendimento e aplicação prática dos conteúdos estudados, não sendo cópia de outros trabalhos.
