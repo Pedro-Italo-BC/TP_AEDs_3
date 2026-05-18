@@ -5,7 +5,7 @@
 
 Video de demonstração do projeto:
 
-**Autores:**
+**Autores:**  
 Ane M. Viana  
 Camila C. Menezes  
 Daniel G. Pereira  
