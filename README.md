@@ -3,7 +3,7 @@
 **Pontifícia Universidade Católica**
 **Ciência da Computação**
 
-Video de demonstração do projeto:
+Video de demonstração do projeto: https://youtu.be/_tTU7Dw1KZs?feature=shared
 
 **Autores:**  
 Ane M. Viana  
