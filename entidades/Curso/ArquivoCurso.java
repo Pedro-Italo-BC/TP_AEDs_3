@@ -4,6 +4,8 @@ import entidades.CursoUsuario.ArquivoCursoUsuario;
 import entidades.CursoUsuario.CursoUsuario;
 import entidades.Usuario.ArquivoUsuario;
 import entidades.Usuario.Usuario;
+
+
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
@@ -36,7 +38,8 @@ public class ArquivoCurso extends Arquivo<Curso> {
         
         int id = super.create(c);
         relacionamentoUsuarioCurso.create(new ParIdId(c.getIdUsuario(), id));
-        indiceNome.create(new ParNomeId(c.getNome(), id));
+        indiceNome.create(new ParNomeId(c.getNome(), id));    
+
         return id;
     }
 

@@ -1,0 +1,63 @@
+package utils;
+
+import aed3.ElementoLista;
+import aed3.ListaInvertida;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import utils.nomeFrequencia;
+
+public class TF {
+    ArrayList<String> stopWords = new ArrayList<>(List.of("de", "a", "o", "que", "e", "do", "da", "em", "um", "para", "é", "com", "não", "uma", "os", "no", "se", "na", "por", "mais", "as", "dos", "como", "mas", "foi", "ao", "ele", "das", "tem", "à", "seu", "sua", "ou", "ser", "quando", "muito", "há", "nos", "já", "está", "eu", "também", "só", "pelo", "pela", "até", "isso", "ela", "entre", "era", "depois", "sem", "mesmo", "aos", "ter", "seus", "quem", "nas", "me", "esse", "eles", "estão", "você", "tinha", "foram", "essa", "num", "nem", "suas", "meu", "às", "minha", "têm", "numa", "pelos", "elas", "havia", "seja", "qual", "será", "nós", "tenho", "lhe"));
+    public TF() {
+
+    }
+
+    //calcula a frequencia das palavras
+    public HashMap<String, ElementoLista> calcularTf(String palavras, int id) {
+        //quebra a string e remove as stop words
+        ArrayList<String> termos = quebrarString(palavras);
+        termos = removerStopWords(termos);
+
+        HashMap<String, ElementoLista> frequencias = new HashMap<>();
+        for(int i = 0; i < termos.size(); i++) {
+            if(!frequencias.containsKey(termos.get(i))) {
+                frequencias.put(termos.get(i), new ElementoLista(id, 1/(float)(termos.size())));
+            } else {
+                ElementoLista atual = frequencias.get(termos.get(i));
+                atual.setFrequencia(atual.getFrequencia()+ 1/(float)(termos.size()));
+                frequencias.put(termos.get(i), atual);
+            }
+        }
+        /*String chaves[] = frequencias.keySet().toArray(new String[0]);
+
+        for(int i = 0; i < chaves.length; i++) {
+            System.out.println(chaves[i] + ": " + frequencias.get(chaves[i]).toString());
+        }*/
+        return frequencias;
+    }
+
+
+    //quebra a string passando as palavras para um arraylist
+    public ArrayList<String> quebrarString(String palavras) {
+        ArrayList<String> termos = new ArrayList<>();
+        //Separa as palavras por espaços
+        Collections.addAll(termos, palavras.split(" "));
+        return termos;
+    }
+
+
+    //remove as stop words do arraylist
+    public ArrayList<String> removerStopWords(ArrayList<String> termos) {
+        for(int i = 0; termos.size() > i; i++) {
+            if(stopWords.contains(termos.get(i))) {
+                termos.remove(i);
+                i--;
+            }
+        }
+        return termos;
+    }
+}
