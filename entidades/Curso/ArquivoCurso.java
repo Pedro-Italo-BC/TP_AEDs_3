@@ -40,6 +40,10 @@ public class ArquivoCurso extends Arquivo<Curso> {
         relacionamentoUsuarioCurso.create(new ParIdId(c.getIdUsuario(), id));
         indiceNome.create(new ParNomeId(c.getNome(), id));    
 
+        ArquivoUTF utf = new ArquivoUTF();
+        utf.inserir(c, id);
+        
+
         return id;
     }
 

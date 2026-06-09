@@ -75,7 +75,6 @@ public class Menu_curso {
                     Curso novo = new Curso(user.getIdUsuario(), nome, descricao, inicio, estado);
 
                     arqCurso.create(novo);
-                    
 
                     System.out.println("Curso criado com sucesso.");
                 }
