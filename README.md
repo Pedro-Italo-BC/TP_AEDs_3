@@ -1,20 +1,15 @@
-# TRABALHO PRÁTICO 02 - ALGORITMOS E ESTRUTURAS DE DADOS 3
+# TRABALHO PRÁTICO 03 - ALGORITMOS E ESTRUTURAS DE DADOS 3
 
 **Pontifícia Universidade Católica**
 **Ciência da Computação**
 
-Video de demonstração do projeto: https://youtu.be/_tTU7Dw1KZs?feature=shared
+Video de demonstração do projeto:
 
-**Autores:**  
-Ane M. Viana  
-Camila C. Menezes  
-Daniel G. Pereira  
-Pedro Ítalo B. Cardoso  
-
----
-
-Para rodar nosso projeto, utilize:  
- javac Principal.java menus\.java entidades\Usuario\.java entidades\Curso\.java entidades\CursoUsuario\.java
+**Autores:**
+Ane M. Viana
+Camila C. Menezes
+Daniel G. Pereira
+Pedro Ítalo B. Cardoso
 
 ---
 
@@ -22,18 +17,16 @@ Para rodar nosso projeto, utilize:
 
 1. Descrição Completa
 - Visão Geral
-- Telas do Sistema (Prints)
+- Implementação do Índice Invertido
+- Busca por Palavras-Chave
 - Classes Criadas
 - Operações Implementadas
-- Índices
+- Telas do Sistema (Prints)
 2. Pergunta 01
 3. Pergunta 02
 4. Pergunta 03
 5. Pergunta 04
 6. Pergunta 05
-7. Pergunta 06
-8. Pergunta 07
-9. Pergunta 08
 
 ---
 
@@ -41,185 +34,121 @@ Para rodar nosso projeto, utilize:
 
 ### Visão Geral
 
-O sistema desenvolvido consiste em uma aplicação de gerenciamento de cursos e inscrições, permitindo que usuários visualizem cursos, realizem inscrições e que os responsáveis pelos cursos gerenciem seus participantes.
+O sistema desenvolvido consiste em uma plataforma de gerenciamento de cursos, permitindo que usuários criem, consultem, alterem e removam cursos. Além disso, os usuários podem realizar inscrições em cursos disponíveis, consultar detalhes dos cursos cadastrados e localizar cursos por meio de código compartilhável ou palavras-chave.
 
-Toda a persistência é feita em arquivos binários utilizando RandomAccessFile, com uso de índices (Árvore B+ e Hash Extensível) para garantir eficiência nas operações e evitar buscas sequenciais.
+Cada curso possui um identificador único, um nome, uma descrição, uma data de início, um estado (aberto, encerrado, concluído ou cancelado) e um código compartilhável gerado automaticamente. Esse código permite localizar rapidamente um curso específico sem a necessidade de conhecer seu identificador interno.
 
-### Telas do Sistema (Prints)
+Os dados são armazenados em arquivos persistentes e indexados por estruturas auxiliares para melhorar o desempenho das operações de busca e recuperação de informações.e evitar buscas sequenciais.
 
-### Menu Minhas Inscrições   
-<img src="imgs/Menu.jpg" width="700"> 
+### Implementação do Índice Invertido
 
-### Listagem paginada de cursos   
-<img src="imgs/Listagem.jpg" width="700"> 
+Como requisito desta etapa do trabalho, foi implementado um índice invertido para os nomes dos cursos utilizando a classe ListaInvertida disponibilizada pelo professor.
 
-### Detalhes de um curso   
-<img src="imgs/Detalhes.jpg" width="700"> 
+O índice é atualizado automaticamente sempre que um curso é criado ou tem seu nome alterado. Durante esse processo, o nome do curso passa por um pré-processamento textual composto pelas seguintes etapas:
 
-### Usuário inscrito no curso   
-<img src="imgs/Inscritos.jpg" width="700"> 
+- Conversão de todas as letras para minúsculas;
+- Remoção de acentos;
+- Separação do texto em palavras individuais;
+- Remoção de stop words (palavras irrelevantes para a busca, como artigos e preposições);
+- Cálculo da frequência relativa de cada termo (TF).
 
-### Gerenciamento de inscritos    
-<img src="imgs/InscritoC1.jpg" width="700">  
-<img src="imgs/InscritoC2.jpg" width="700"> 
+Após o processamento, os termos são armazenados na estrutura de índice invertido juntamente com seus respectivos valores de frequência.
 
-### Busca por código NanoID   
-<img src="imgs/Busca.jpg" width="700">
+### Busca por Palavras-Chave
 
+Foi implementada uma busca textual baseada no modelo TF×IDF.
+
+Quando o usuário informa uma palavra-chave:
+
+1. O texto digitado passa pelo mesmo processo de normalização utilizado na indexação;
+2. Os termos são pesquisados no índice invertido;
+3. Os pesos dos documentos são calculados utilizando TF×IDF;
+4. Os resultados são ordenados por relevância;
+5. Os cursos mais relevantes são exibidos primeiro.
+
+Os resultados da busca são apresentados de forma paginada, exibindo até 10 cursos por página, permitindo navegação entre páginas quando necessário.
 
 ### Classes Criadas
 
-CursoUsuario:
-- Representa a relação N:N entre cursos e usuários.
-- Armazena:
-- idCursoUsuario
-- idCurso
-- idUsuario
-- dataInscricao
-- cancelado
+ArquivoTF:  
+Classe criada para realizar a manutenção do índice invertido dos nomes dos cursos.
 
-ArquivoCursoUsuario:
-- Responsável pelo CRUD da entidade CursoUsuario.
-- Implementa os índices utilizando Árvore B+ e Hash Extensível.
+Responsabilidades:
 
-InscritoInfo:
-- Utilizada para reunir informações do usuário e da inscrição em uma única estrutura.
+- Inserir novos termos no índice durante a criação de cursos;
+- Atualizar os termos quando o nome do curso é alterado;
+Remover referências antigas do índice.
+
+TF:  
+Classe responsável pelo processamento textual e cálculo da frequência dos termos.
+
+Principais operações:
+
+- Remoção de acentos;
+- Conversão para letras minúsculas;
+- Remoção de stop words;
+- Cálculo do valor TF (Term Frequency).
+
+IDF:  
+Classe responsável pela recuperação dos termos armazenados no índice invertido e pelo cálculo do peso TF×IDF utilizado para ordenar os resultados das buscas.
+
+Também realiza a ordenação dos cursos encontrados por relevância.
 
 ### Operações Implementadas
 
-CursoUsuario:
-- Criar inscrição
-- Ler inscrição
-- Atualizar inscrição
-- Cancelar/remover inscrição
+Busca por Código Compartilhável:  
+Cada curso recebe automaticamente um código único composto por caracteres alfanuméricos. Esse código pode ser utilizado para localizar diretamente um curso específico.
 
+Índice Invertido:  
+Foi implementado um índice invertido utilizando a classe ListaInvertida para armazenar os termos presentes nos nomes dos cursos e seus respectivos valores de frequência.
 
-### Índices
+Busca por Palavras-Chave Utilizando TF×IDF:  
+Foi implementado um mecanismo de busca textual baseado no cálculo TF×IDF. Os cursos retornados são ordenados automaticamente de acordo com sua relevância para a consulta realizada pelo usuário.
 
-#### Árvore B+ 01 — idUsuario → idCursoUsuario
+Atualização Automática do Índice:  
+Sempre que um curso é criado ou alterado, o índice invertido é atualizado automaticamente, garantindo consistência entre os dados armazenados e os resultados das pesquisas.
 
-Implementada através do índice: private ArvoreBMais<ParIdId> idxUsuarioCurso;
+### Telas do Sistema (Prints)
 
-Permite recuperar rapidamente todas as inscrições de um usuário sem percorrer o arquivo inteiro.
-
-Método principal: readAllByIdUsuario(int idUsuarioBuscado)
-
-#### Árvore B+ 02 — idCurso → idCursoUsuario
-Implementada através do índice: private ArvoreBMais<ParIdId> idxCursoUsuario;
-Permite recuperar rapidamente todos os usuários inscritos em um curso.
-
-Método principal: readAllByIdCurso(int idCursoBuscado)
-
-#### Hash Extensível — idCursoUsuario → endereço
-Implementado através do índice: private HashExtensivel<ParIDEndereco> idxDireto;
-
-Utilizado para localizar diretamente um registro no arquivo a partir do ID da inscrição.
-
-Métodos que utilizam o índice:
-- readById()
-- delete()
-- update()
+### Busca de Cursos
+<img src="../imgs/tp3.jpg" width="700">
+<img src="../imgs/tp31.jpg" width="700">
 
 ---
 
 ## 2. Pergunta 01
 
-**Há um CRUD da entidade de associação CursoUsuario (que estende a classe ArquivoIndexado, acrescentando Tabelas Hash Extensíveis e Árvores B+ como índices diretos e indiretos conforme necessidade) que funciona corretamente?**
+**O índice invertido com os termos dos nomes dos cursos foi criado usando a classe ListaInvertida?**
 
-Sim. Foi implementado um CRUD funcional para a entidade de associação CursoUsuario, responsável pelo relacionamento N:N entre usuários e cursos.
-
-A implementação utiliza:
-
-- Hash Extensível como índice direto;
-- Árvores B+ como índices indiretos;
-- RandomAccessFile para persistência dos registros.
-
-Embora a implementação não utilize diretamente herança da classe ArquivoIndexado, ela segue a mesma arquitetura de persistência e indexação proposta no trabalho.
+SIM. Foi implementado um índice invertido para os nomes dos cursos utilizando a classe ListaInvertida. A manutenção desse índice é realizada pela classe ArquivoTF, que insere os termos durante a criação dos cursos e atualiza o índice sempre que o nome de um curso é alterado. Os termos são previamente normalizados por meio da remoção de acentos, conversão para letras minúsculas e eliminação de stop words.
 
 ---
 
 ## 3. Pergunta 02
 
-**A visão de inscrições está corretamente implementada e permite consultas aos cursos em que um usuário está inscrito?**
+**É possível buscar cursos por palavras no menu de inscrição?**
 
-Sim. O sistema possui uma visão de inscrições que permite ao usuário consultar todos os cursos em que está inscrito.
-
-Essa funcionalidade foi implementada utilizando a entidade de associação CursoUsuario e os índices com Árvores B+, evitando buscas sequenciais no arquivo principal.
-
-A recuperação das inscrições do usuário é feita pelo método:
-
-- readAllByIdUsuario(int idUsuarioBuscado)
-
-Esse método utiliza a árvore B+:
-
-- idUsuario → idCursoUsuario
-
-permitindo localizar rapidamente todas as inscrições associadas a um usuário.
-
-Além disso, o sistema permite:
-
-- visualizar os dados completos do curso;
-- cancelar inscrições;
-- impedir inscrições duplicadas;
-- validar cursos cancelados ou com inscrições encerradas.
+SIM. Foi adicionada ao menu de inscrições a opção "Buscar curso por palavra-chave". A busca utiliza o índice invertido e o cálculo TF×IDF para recuperar e ordenar os cursos de acordo com a relevância dos termos pesquisados. Os resultados são apresentados de forma paginada, exibindo até 10 cursos por página.
 
 ---
 
 ## 4. Pergunta 03
 
-**A visão de cursos funciona corretamente e permite a gestão dos usuários inscritos em um curso?**
+**O trabalho compila corretamente?**
 
-Sim. A visão de cursos foi implementada corretamente e permite ao dono do curso gerenciar os usuários inscritos. O sistema possibilita:
-
-- localizar cursos pelo código NanoID;
-- visualizar os detalhes completos do curso;
-- listar os usuários inscritos em um curso específico;
-- consultar rapidamente as inscrições utilizando índices com Árvores B+;
-- remover inscrições de usuários;
-- validar estados do curso (aberto, encerrado, cancelado e concluído).
+Sim. O projeto compila corretamente, sem apresentar erros de compilação. Todas as classes necessárias para a implementação do índice invertido e da busca por palavras-chave foram integradas ao sistema e compilam normalmente.
 
 ---
 
 ## 5. Pergunta 04
 
-**Há uma visualização dos cursos de outras pessoas por meio de um código NanoID?**
+**O trabalho está completo e funcionando sem erros de execução?**
 
-Sim, o sistema possui visualização de cursos de outras pessoas por meio de um código NanoID.
-
-Cada curso possui um código único armazenado no atributo codigo, permitindo que usuários encontrem cursos específicos sem precisar navegar pela listagem completa.
+Sim. Durante os testes realizados pelo grupo, as funcionalidades implementadas para esta etapa funcionaram corretamente, incluindo a criação e atualização do índice invertido, a busca por palavras-chave utilizando TF×IDF e a busca por código compartilhável.
 
 ---
 
 ## 6. Pergunta 05
-
-**A integridade do relacionamento entre cursos e usuários está mantida em todas as operações?**
-
-Sim, a integridade do relacionamento entre cursos e usuários está mantida em todas as operações implementadas.
-
-A entidade CursoUsuario representa a relação N:N entre usuários e cursos, garantindo que uma inscrição sempre associe corretamente um idUsuario a um idCurso.
-
----
-
-## 7. Pergunta 06
-
-**O trabalho compila corretamente?**
-
-Sim. O projeto compila corretamente, sem apresentar erros de compilação. Todas as classes foram estruturadas de forma consistente, respeitando a organização proposta pela arquitetura MVC, e as dependências entre os componentes foram devidamente tratadas.
-
----
-
-## 8. Pergunta 07
-
-**O trabalho está completo e funcionando sem erros de execução?**
-
-Sim. Durante os testes realizados pelo grupo, as funcionalidades implementadas funcionaram corretamente, incluindo o CRUD de inscrições, os índices com Árvores B+ e Hash Extensível, as consultas de cursos e o gerenciamento de inscritos.
-
-Não foram encontrados erros de execução nos cenários testados.
-
-
----
-
-## 9. Pergunta 08
 
 **O trabalho é original e não a cópia de um trabalho de outro grupo?**
 
