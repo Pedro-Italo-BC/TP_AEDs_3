@@ -175,7 +175,9 @@ public class Inscricao {
                             }
                         }
                     } else {
+                        System.out.println();
                         System.out.println("Nenhum curso encontrado para a palavra-chave: " + palavraChave);
+                        System.out.println();
                     }
                 }
             }

@@ -36,9 +36,9 @@ public class IDF {
                 //passa por cada entidade que possui a palavra
                 for(int j = 0; j < elementos.length; j++) {
                     if(!idf.containsKey(elementos[j].getId())) { //caso nao exista o id
-                        idf.put(elementos[j].getId(), (float)(elementos[j].getFrequencia()*Math.log10(qtdDados/(float)(elementos.length))));
+                        idf.put(elementos[j].getId(), (float)(elementos[j].getFrequencia()*(Math.log10(qtdDados/(float)(elementos.length))+1)));
                     } else { //caso exista o id
-                        idf.put(elementos[j].getId(), (float)(idf.get(elementos[j].getId()) + elementos[j].getFrequencia()*Math.log10(qtdDados/(float)(elementos.length))));
+                        idf.put(elementos[j].getId(), (float)(idf.get(elementos[j].getId()) + elementos[j].getFrequencia()*(Math.log10(qtdDados/(float)(elementos.length))+1)));
                     }
                 }
             }catch (InterruptedException e) {
@@ -51,9 +51,10 @@ public class IDF {
         for(int i = 0; i < resultados.length; i++) {
             resultados[i] = new ElementoLista(ids.get(i), idf.get(ids.get(i)));
         }
-
-        //ordena o vetor com os resultados
-        quickSort(resultados);
+        if(resultados.length != 0){
+            //ordena o vetor com os resultados
+            quickSort(resultados);
+        }
         return resultados;
     }
 
