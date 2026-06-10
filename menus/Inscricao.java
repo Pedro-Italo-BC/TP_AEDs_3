@@ -5,7 +5,10 @@ import entidades.Curso.Curso;
 import entidades.Usuario.Usuario;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import aed3.*;
 import utils.Manipulate;
+import utils.IDF;
 
 public class Inscricao {
 
@@ -103,10 +106,31 @@ public class Inscricao {
 
             // buscar por palavra chave
             else if (opcao == 'B') {
-                System.out.println("Funcionalidade não implementada.");
+                System.out.println("TP01 Aeds3");
+                System.out.println("----------");
+                System.out.println("> Inicio > Inscrições > Busca por palavra-chave");
                 System.out.println();
 
-                System.out.println("Pressione qualquer tecla para voltar...");
+                System.out.print("Digite a palavra-chave: ");
+                String palavraChave = sc.nextLine();
+
+                //Chamada para buscar curso
+                ElementoLista[] resultados = IDF.pesquisa(palavraChave, arqCurso.readAll().size());
+
+                if (resultados.length > 0) {
+                    //chama menu de listagem paginada
+                    Curso[] cursosEncontrados = new Curso[resultados.length];
+                    for (int i = 0; i < resultados.length; i++) {
+                        cursosEncontrados[i] = super.read(resultados[i].getId());
+                        
+                    }
+                    DetalheCurso.menu(cursosEncontrados, user, sc);
+                } else {
+                    System.out.println("Nenhum curso encontrado para a palavra-chave: " + palavraChave);
+                }
+
+                System.out.println();
+                System.out.println("Pressione qualquer tecla para continuar...");
                 sc.nextLine();
             }
 

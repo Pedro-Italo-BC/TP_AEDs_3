@@ -149,12 +149,12 @@ public class Curso implements InterfaceEntidade {
     @Override
     public String toString() {
         return "\nID: " + idCurso +
-               "\nUsuário: " + idUsuario +
-               "\nNome: " + nome +
-               "\nDescrição: " + descricao +
-               "\nData de início: " + inicio +
-               "\nCódigo: " + codigo +
-               "\nEstado: " + estado + "\n";
+            "\nUsuário: " + idUsuario +
+            "\nNome: " + nome +
+            "\nDescrição: " + descricao +
+            "\nData de início: " + inicio +
+            "\nCódigo: " + codigo +
+            "\nEstado: " + estado + "\n";
     }
     public boolean hasAluno(){
         return false;

@@ -32,11 +32,7 @@ public class TF {
                 frequencias.put(termos.get(i), atual);
             }
         }
-        /*String chaves[] = frequencias.keySet().toArray(new String[0]);
-
-        for(int i = 0; i < chaves.length; i++) {
-            System.out.println(chaves[i] + ": " + frequencias.get(chaves[i]).toString());
-        }*/
+        
         return frequencias;
     }
 

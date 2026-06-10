@@ -40,9 +40,9 @@ public class ArquivoCurso extends Arquivo<Curso> {
         relacionamentoUsuarioCurso.create(new ParIdId(c.getIdUsuario(), id));
         indiceNome.create(new ParNomeId(c.getNome(), id));    
 
-        ArquivoUTF utf = new ArquivoUTF();
-        utf.inserir(c, id);
-        
+        ArquivoTF tf = new ArquivoTF();
+        tf.create(c, id);
+        tf.read();
 
         return id;
     }
@@ -72,7 +72,6 @@ public class ArquivoCurso extends Arquivo<Curso> {
 
     //encontra todos os cursos que um usuario se inscreveu baseado no id
     public Curso[] readCursosUsuarioAtivo(int idUsuario) throws Exception {
-       
         ArrayList<CursoUsuario> lista = new ArrayList<>(
                 arquivoCursoUsuario.readAllByIdUsuario(idUsuario)
                 .stream()
@@ -140,7 +139,9 @@ public class ArquivoCurso extends Arquivo<Curso> {
                 relacionamentoUsuarioCurso.delete(new ParIdId(c.getIdUsuario(), c.getID()));
                 relacionamentoUsuarioCurso.create(new ParIdId(novo.getIdUsuario(), novo.getID()));
             } 
-
+            ArquivoTF tf = new ArquivoTF();
+            tf.update(novo, novo.getID(), c.getNome());
+            tf.read();
             return true;
         }
         return false;

@@ -130,8 +130,6 @@ public class Menu_curso {
                             }
                             else if (op2 == 'B') {
                                 if(c.getEstado() != 2){
-                                    sc.nextLine();
-
                                     System.out.print("Novo nome: ");
                                     c.setNome(sc.nextLine());
 
@@ -139,6 +137,7 @@ public class Menu_curso {
                                     c.setDescricao(sc.nextLine());
 
                                     arqCurso.update(c);
+                                    
                                 }else{
                                     m = 0;
                                 }

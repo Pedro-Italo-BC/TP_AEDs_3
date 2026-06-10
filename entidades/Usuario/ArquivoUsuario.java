@@ -18,8 +18,6 @@ public class ArquivoUsuario extends Arquivo<Usuario> {
             "./dados/usuario/indiceEmail.d.db",
             "./dados/usuario/indiceEmail.c.db"
         );
-
-     
     }
 
     // CREATE
@@ -55,7 +53,7 @@ public class ArquivoUsuario extends Arquivo<Usuario> {
         return usuarioEncontrado; 
     } 
 
-      public boolean responderPergunta(Usuario user, String resposta) {
+    public boolean responderPergunta(Usuario user, String resposta) {
         boolean resp = false;
         try {
             if(user.getHashRespostaSecreta().equals(Usuario.gerarHash(resposta))) {
