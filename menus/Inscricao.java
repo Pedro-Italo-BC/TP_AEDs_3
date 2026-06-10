@@ -104,29 +104,77 @@ public class Inscricao {
                 sc.nextLine();
             }
 
-            // buscar por palavra chave
+            // buscar por palavra chave ////////////////
             else if (opcao == 'B') {
-                System.out.println("TP01 Aeds3");
-                System.out.println("----------");
-                System.out.println("> Inicio > Inscrições > Busca por palavra-chave");
-                System.out.println();
+                char escolha = '0';
+                while(escolha != 'R') {
+                    System.out.println("TP01 Aeds3");
+                    System.out.println("----------");
+                    System.out.println("> Inicio > Inscrições > Busca por palavra-chave");
+                    System.out.println();
 
-                System.out.print("Digite a palavra-chave: ");
-                String palavraChave = sc.nextLine();
+                    System.out.print("Digite a palavra-chave: ");
+                    String palavraChave = sc.nextLine();
 
-                //Chamada para buscar curso
-                ElementoLista[] resultados = IDF.pesquisa(palavraChave, arqCurso.readAll().size());
+                    IDF IDF = new IDF();
+                    //Chamada para buscar curso
+                    ElementoLista[] resultados = IDF.pesquisa(palavraChave, arqCurso.readAll().size());
 
-                if (resultados.length > 0) {
-                    //chama menu de listagem paginada
-                    Curso[] cursosEncontrados = new Curso[resultados.length];
-                    for (int i = 0; i < resultados.length; i++) {
-                        cursosEncontrados[i] = super.read(resultados[i].getId());
+                    if (resultados.length > 0) {
+                        System.out.println("TP01 Aeds3");
+                        System.out.println("----------");
+                        System.out.println("> Inicio > Inscrições > Busca por palavra-chave > " + palavraChave);
+                        System.out.println();
+                        //chama menu de listagem paginada
+                        Curso[] cursosEncontrados = new Curso[resultados.length];
+                        int esq = 0, dir = 10;
+                        escolha = '0';
                         
+                        while(escolha != 'N' && escolha != 'R') {
+                            //printa os cursos de 10 em 10
+                            for (int i = esq; i < dir && i < resultados.length; i++) {
+                                cursosEncontrados[i] = arqCurso.read(resultados[i].getId());
+                                System.out.println(cursosEncontrados[i].toString());
+                            }
+                            System.out.println("Pagina " + (esq / 10 + 1) + " de " + ((resultados.length - 1) / 10 + 1));
+                            System.out.println("(A) Página anterior");
+                            System.out.println("(B) Próxima página");
+                            System.out.println("(N) Para buscar uma nova palavra-chave");
+                            System.out.println("(R) Retornar ao menu anterior");
+                            aux = "";
+                            aux = sc.nextLine();
+                            while(aux.length() == 0) {
+                                System.out.println("Opção inválida. Digite novamente.");
+                                aux = sc.nextLine();
+                            }
+                            escolha = Character.toUpperCase(aux.charAt(0));
+                            if(escolha == 'A') {
+                                if(esq - 10 >= 0) {
+                                    esq -= 10;
+                                    dir -= 10;
+                                } else {
+                                    System.out.println("Você já está na primeira página.");
+                                }
+                            } else if(escolha == 'B') {
+                                if(esq + 10 < resultados.length) {
+                                    esq += 10;
+                                    dir += 10;
+                                } else {
+                                    System.out.println("Você já está na última página.");
+                                }
+                            } else if(escolha == 'N') {
+                                //VAI SAIR SOZINHO
+                            } else if(escolha == 'R') {
+                                //VAI SAIR SOZINHO
+                            }else if(Manipulate.toInt(aux) > 0 && Manipulate.toInt(aux) > esq && Manipulate.toInt(aux) <= dir) {
+                                DetalheCurso.menu(cursosEncontrados[Manipulate.toInt(aux) - 1], user, sc);
+                            }else{
+                                System.out.println("Opção inválida.");
+                            }
+                        }
+                    } else {
+                        System.out.println("Nenhum curso encontrado para a palavra-chave: " + palavraChave);
                     }
-                    DetalheCurso.menu(cursosEncontrados, user, sc);
-                } else {
-                    System.out.println("Nenhum curso encontrado para a palavra-chave: " + palavraChave);
                 }
 
                 System.out.println();

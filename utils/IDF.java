@@ -9,10 +9,18 @@ import aed3.ElementoLista;
 import aed3.ListaInvertida;
 
 public class IDF {
-    static ListaInvertida listaInvertida = new ListaInvertida(500, "./dados/curso/nomeArquivoDicionario.db", "./dados/curso/nomeArquivoBlocos.db");
-    static ArrayList<String> stopWords = new ArrayList<>(List.of("de", "a", "o", "que", "e", "do", "da", "em", "um", "para", "é", "com", "não", "uma", "os", "no", "se", "na", "por", "mais", "as", "dos", "como", "mas", "foi", "ao", "ele", "das", "tem", "à", "seu", "sua", "ou", "ser", "quando", "muito", "há", "nos", "já", "está", "eu", "também", "só", "pelo", "pela", "até", "isso", "ela", "entre", "era", "depois", "sem", "mesmo", "aos", "ter", "seus", "quem", "nas", "me", "esse", "eles", "estão", "você", "tinha", "foram", "essa", "num", "nem", "suas", "meu", "às", "minha", "têm", "numa", "pelos", "elas", "havia", "seja", "qual", "será", "nós", "tenho", "lhe"));
+    ListaInvertida listaInvertida;
+    ArrayList<String> stopWords = new ArrayList<>(List.of("de", "a", "o", "que", "e", "do", "da", "em", "um", "para", "é", "com", "não", "uma", "os", "no", "se", "na", "por", "mais", "as", "dos", "como", "mas", "foi", "ao", "ele", "das", "tem", "à", "seu", "sua", "ou", "ser", "quando", "muito", "há", "nos", "já", "está", "eu", "também", "só", "pelo", "pela", "até", "isso", "ela", "entre", "era", "depois", "sem", "mesmo", "aos", "ter", "seus", "quem", "nas", "me", "esse", "eles", "estão", "você", "tinha", "foram", "essa", "num", "nem", "suas", "meu", "às", "minha", "têm", "numa", "pelos", "elas", "havia", "seja", "qual", "será", "nós", "tenho", "lhe"));
     
-    public static ElementoLista[] pesquisa(String entrada, int qtdDados){
+    public IDF(){
+        try{
+            listaInvertida = new ListaInvertida(500, "./dados/curso/nomeArquivoDicionario.db", "./dados/curso/nomeArquivoBlocos.db");
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public  ElementoLista[] pesquisa(String entrada, int qtdDados)throws Exception {
         ArrayList<String> entradaSemEspaco = quebrarString(entrada);
         entradaSemEspaco = removerStopWords(entradaSemEspaco);
 
@@ -25,9 +33,9 @@ public class IDF {
                 //passa por cada entidade que possui a palavra
                 for(int j = 0; j < elementos.length; j++) {
                     if(!idf.containsKey(elementos[j].getId())) { //caso nao exista o id
-                        idf.put(elementos[j].getId(), elementos[j].getFrequencia()*Math.log10(qtdDados/(float)(elementos.length)));
+                        idf.put(elementos[j].getId(), (float)(elementos[j].getFrequencia()*Math.log10(qtdDados/(float)(elementos.length))));
                     } else { //caso exista o id
-                        idf.put(elementos[j].getId(), idf.get(elementos[j].getId()) + elementos[j].getFrequencia()*Math.log10(qtdDados/(float)(elementos.length)));
+                        idf.put(elementos[j].getId(), (float)(idf.get(elementos[j].getId()) + elementos[j].getFrequencia()*Math.log10(qtdDados/(float)(elementos.length))));
                     }
                 }
             }catch (InterruptedException e) {
@@ -46,11 +54,11 @@ public class IDF {
         return resultados;
     }
 
-    public static void quickSort(ElementoLista[] vetor) {
+    public  void quickSort(ElementoLista[] vetor) {
         quickSort(vetor, 0, vetor.length - 1);
     }
 
-    public static void quickSort(ElementoLista[] vetor, int esq, int dir) {
+    public  void quickSort(ElementoLista[] vetor, int esq, int dir) {
         int i = esq,j = dir;
         float pivo = vetor[(esq+dir)/2].getFrequencia();
         while (i <= j) {
@@ -73,13 +81,13 @@ public class IDF {
         return;
     }
 
-    public static ArrayList<String> quebrarString(String palavras) {
+    public  ArrayList<String> quebrarString(String palavras) {
         ArrayList<String> termos = new ArrayList<>();
         //Separa as palavras por espaços
         Collections.addAll(termos, palavras.split(" "));
         return termos;
     }
-    public static ArrayList<String> removerStopWords(ArrayList<String> termos) {
+    public  ArrayList<String> removerStopWords(ArrayList<String> termos) {
         for(int i = 0; termos.size() > i; i++) {
             if(stopWords.contains(termos.get(i))) {
                 termos.remove(i);
