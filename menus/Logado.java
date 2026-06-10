@@ -56,7 +56,11 @@ public class Logado {
                 System.out.println();
 
                 System.out.println("Pressione qualquer tecla para voltar...");
-                char op2 = sc.nextLine().charAt(0);
+                aux = "";
+                while(aux.length() == 0){
+                    aux = sc.nextLine();
+                }
+                char op2 = aux.charAt(0);
 
                 if(op2 == 'A') {
                 System.out.print("Digite seu nome: "); //NOME

@@ -131,11 +131,13 @@ public class Inscricao {
                         escolha = '0';
                         
                         while(escolha != 'N' && escolha != 'R') {
+                            System.out.println("\n\n\n\n\n");
                             //printa os cursos de 10 em 10
                             for (int i = esq; i < dir && i < resultados.length; i++) {
                                 cursosEncontrados[i] = arqCurso.read(resultados[i].getId());
-                                System.out.println(cursosEncontrados[i].toString());
+                                System.out.println("[" + i + "] " + cursosEncontrados[i].getNome());
                             }
+                            System.out.println();
                             System.out.println("Pagina " + (esq / 10 + 1) + " de " + ((resultados.length - 1) / 10 + 1));
                             System.out.println("(A) Página anterior");
                             System.out.println("(B) Próxima página");
@@ -176,10 +178,6 @@ public class Inscricao {
                         System.out.println("Nenhum curso encontrado para a palavra-chave: " + palavraChave);
                     }
                 }
-
-                System.out.println();
-                System.out.println("Pressione qualquer tecla para continuar...");
-                sc.nextLine();
             }
 
             // listar todos os cursos

@@ -1,14 +1,13 @@
 package utils;
 
 import aed3.ElementoLista;
-import aed3.ListaInvertida;
-
-import java.lang.reflect.Array;
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import utils.nomeFrequencia;
+import java.util.regex.Pattern;
 
 public class TF {
     ArrayList<String> stopWords = new ArrayList<>(List.of("de", "a", "o", "que", "e", "do", "da", "em", "um", "para", "é", "com", "não", "uma", "os", "no", "se", "na", "por", "mais", "as", "dos", "como", "mas", "foi", "ao", "ele", "das", "tem", "à", "seu", "sua", "ou", "ser", "quando", "muito", "há", "nos", "já", "está", "eu", "também", "só", "pelo", "pela", "até", "isso", "ela", "entre", "era", "depois", "sem", "mesmo", "aos", "ter", "seus", "quem", "nas", "me", "esse", "eles", "estão", "você", "tinha", "foram", "essa", "num", "nem", "suas", "meu", "às", "minha", "têm", "numa", "pelos", "elas", "havia", "seja", "qual", "será", "nós", "tenho", "lhe"));
@@ -18,6 +17,7 @@ public class TF {
 
     //calcula a frequencia das palavras
     public HashMap<String, ElementoLista> calcularTf(String palavras, int id) {
+        palavras = removerAcentoStringEDeixarMinusculo(palavras);
         //quebra a string e remove as stop words
         ArrayList<String> termos = quebrarString(palavras);
         termos = removerStopWords(termos);
@@ -34,6 +34,13 @@ public class TF {
         }
         
         return frequencias;
+    }
+
+    public static String removerAcentoStringEDeixarMinusculo(String frase){
+        frase = Normalizer.normalize(frase, Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        frase = frase.toLowerCase();
+        return pattern.matcher(frase).replaceAll("");
     }
 
 

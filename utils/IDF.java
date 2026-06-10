@@ -1,9 +1,12 @@
 package   utils;
 
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import aed3.ElementoLista;
 import aed3.ListaInvertida;
@@ -21,9 +24,9 @@ public class IDF {
     }
 
     public  ElementoLista[] pesquisa(String entrada, int qtdDados)throws Exception {
+        entrada = removerAcentoStringEDeixarMinusculo(entrada);
         ArrayList<String> entradaSemEspaco = quebrarString(entrada);
         entradaSemEspaco = removerStopWords(entradaSemEspaco);
-
         HashMap<Integer, Float> idf = new HashMap<>();
 
         //percorre cada palavra da entrada
@@ -52,6 +55,13 @@ public class IDF {
         //ordena o vetor com os resultados
         quickSort(resultados);
         return resultados;
+    }
+
+    public static String removerAcentoStringEDeixarMinusculo(String frase){
+        frase = Normalizer.normalize(frase, Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        frase = frase.toLowerCase();
+        return pattern.matcher(frase).replaceAll("");
     }
 
     public  void quickSort(ElementoLista[] vetor) {
