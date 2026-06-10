@@ -6,10 +6,10 @@
 Video de demonstração do projeto:
 
 **Autores:**
-Ane M. Viana
-Camila C. Menezes
-Daniel G. Pereira
-Pedro Ítalo B. Cardoso
+Ane M. Viana  
+Camila C. Menezes  
+Daniel G. Pereira  
+Pedro Ítalo B. Cardoso  
 
 ---
 
