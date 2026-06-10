@@ -3,13 +3,15 @@
 **Pontifícia Universidade Católica**
 **Ciência da Computação**
 
-Video de demonstração do projeto:
+Video de demonstração do projeto: https://youtu.be/IjO92Pl0mC4?si=CFDl4fixcY9zz7pt
 
 **Autores:**  
 Ane M. Viana  
 Camila C. Menezes  
 Daniel G. Pereira  
 Pedro Ítalo B. Cardoso  
+
+> **Nota para Windows:** Caso esteja utilizando o Windows, execute o comando `chcp 65001` no terminal antes de rodar os outros comandos para garantir o funcionamento completo.
 
 ---
 
